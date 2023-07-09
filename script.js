@@ -5,11 +5,10 @@ const sidebar = document.querySelector(".sidebar");
 const hero = document.querySelector(".hero");
 const addButton = document.getElementById("add-button");
 const popupWindow = document.querySelector(".popup");
-let titleInput = document.getElementById("title");
-let authorInput = document.getElementById("author");
-let pagesInput = document.getElementById("pages");
-let stateInput = document.getElementById("state");
 let submitButton = document.getElementById("submit-button");
+const bookForm = document.getElementById("book-form");
+const trashButton = document.getElementById("trash-icon");
+
 
 function Book(title, author, pages, state) {
 
@@ -24,19 +23,15 @@ function addBookToLibrary() {
 }
 
 function displayBooks(bookArray) {
+    mainBox.innerHTML ="";
     bookArray.forEach(element => {
-        const newCard = mainBox.appendChild(document.createElement("div"));
+        let newCard = mainBox.appendChild(document.createElement("div"));
         newCard.classList.add("card");
-
-        const bookTitle = newCard.appendChild(document.createElement("p"));
-        const bookAuthor = newCard.appendChild(document.createElement("p"));
-        const bookPages = newCard.appendChild(document.createElement("p"));
-        const bookState = newCard.appendChild(document.createElement("p"));
-        bookTitle.textContent = element.state;
-        bookAuthor.textContent = element.author;
-        bookPages.textContent = element.title;
-        bookState.textContent = element.state;
-        
+        console.log(bookArray[1]);
+        let bookTitle = newCard.appendChild(document.createElement("p"));
+        let bookAuthor = newCard.appendChild(document.createElement("p"));
+        let bookPages = newCard.appendChild(document.createElement("p"));
+        let bookState = newCard.appendChild(document.createElement("p"));
         const cardButtons = newCard.appendChild(document.createElement("div"));
         cardButtons.classList.add("card-buttons");
         const shareIcon = cardButtons.appendChild(document.createElement("img"));
@@ -45,9 +40,25 @@ function displayBooks(bookArray) {
         shareIcon.src = "img/share.svg";
         trashIcon.classList.add("icon");
         trashIcon.src = "img/trash.svg";
+
+        bookTitle.textContent = element.title;
+        bookAuthor.textContent = element.author;
+        bookPages.textContent = element.pages;
+        bookState.textContent = element.state;
+        if(bookState.textContent === "read") {
+            bookState.style.color = "cyan";
+        }
+        else {
+            bookState.style.color = "red";
+        }
+        console.log("state: " + element.state);;
     });
 }
 
+const isHidden = elem => {
+    const styles = window.getComputedStyle(elem);
+    return styles.visibility === "hidden";
+}
 function showPopup() {
     if(isHidden(popupWindow)) {
         popupWindow.style.visibility = "visible";
@@ -58,29 +69,57 @@ function showPopup() {
         popupWindow.style.visibility = "hidden";
         container.style.webkitFilter = "blur(0px)";
         console.log("set visiblity to visible");
+
     }
 }
 
-const isHidden = elem => {
-    const styles = window.getComputedStyle(elem);
-    return styles.visibility === "hidden";
+function submitButtonClick(event) {
+    event.preventDefault();
+    let titleInput = document.getElementById("title").value;
+    let authorInput = document.getElementById("author").value;
+    let pagesInput = document.getElementById("pages").value;
+    let stateInput = document.getElementById("state");
+
+    if(stateInput.checked === true) {
+        let newBook =  new Book(titleInput,authorInput,pagesInput,"read");
+        myLibrary.push(newBook);
+        showPopup();
+        displayBooks(myLibrary);
+    }
+    else {
+        let newBook =  new Book(titleInput,authorInput,pagesInput,"unread");
+        myLibrary.push(newBook);
+        showPopup();
+        displayBooks(myLibrary);
+    }
 }
 
-myLibrary[0] = new Book("title","author",250,"not read");
-myLibrary[1] = new Book("title","author",250,"not read");
+function clearPopup() {
+    document.getElementById("title").innerHTML = "";
+    document.getElementById("author").innerHTML = "";
+    document.getElementById("pages").innerHTML = "";
+    document.getElementById("state").innerHTML = "";
+}
+
+myLibrary[0] = new Book("1984","George Orwell",259,"read");
+myLibrary[1] = new Book("Brave new World","Alous Huxley",350,"unread");
 displayBooks(myLibrary);
 console.log(addButton);
+console.log(myLibrary[0]);
 
 
 
 addButton.addEventListener("click", function() {
+    bookForm.reset();
     showPopup();
 });
 
 
-submitButton.addEventListener("click", function() {
-    let newBook = Book(titleInput,authorInput,pagesInput,stateInput);
-    myLibrary.push(newBook);
-    showPopup();
+submitButton.addEventListener("click", submitButtonClick, false);
+
+window.addEventListener("keydown", function(e) {
+    if(e.code === "Escape" && !isHidden(popupWindow)) {
+        showPopup();
+    }
 });
 
