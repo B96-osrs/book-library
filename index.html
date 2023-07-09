@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="script.js" defer></script>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -46,9 +46,32 @@
             </div>
         </div>
         <div class="sidebar">
-            <button id="add-button"> + &nbsp; Add Book</button>
+            <button id="add-button" class="button"> + &nbsp; Add Book</button>
         </div>
     </div>
-    
+    <div class="popup">
+        <form action="/my-handling-form-page" method="post">
+            <h2>Add book</h2>
+            <ul>
+                <li>
+                    <label for="title">Title</label>
+                    <input type="text" id="title">
+                </li>
+                <li>
+                    <label for="author">Author</label>
+                    <input type="text" id="author">
+                </li>
+                <li>
+                    <label for="pages">Pages</label>
+                    <input type="number" id="pages">
+                </li>
+                <li>
+                    <label for="state">Read?</label>
+                    <input type="checkbox" id="state">
+                </li>
+            </ul>
+            <button id="submit-button" class="button">Add</button>
+        </form>
+    </div>
 </body>
 </html>
