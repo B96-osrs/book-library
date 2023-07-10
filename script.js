@@ -27,12 +27,20 @@ function displayBooks(bookArray) {
         let bookAuthor = newCard.appendChild(document.createElement("p"));
         let bookPages = newCard.appendChild(document.createElement("p"));
         let bookState = newCard.appendChild(document.createElement("p"));
+
         const cardButtons = newCard.appendChild(document.createElement("div"));
         cardButtons.classList.add("card-buttons");
+
+        const readIcon = cardButtons.appendChild(document.createElement("img"));
+        readIcon.classList.add("icon");
+        readIcon.classList.add("read");
+        readIcon.src = "img/read.svg";
+
         const shareIcon = cardButtons.appendChild(document.createElement("img"));
-        const trashIcon = cardButtons.appendChild(document.createElement("img"));
         shareIcon.classList.add("icon");
         shareIcon.src = "img/share.svg";
+
+        const trashIcon = cardButtons.appendChild(document.createElement("img"));
         trashIcon.classList.add("icon");
         trashIcon.classList.add("trash");
         trashIcon.src = "img/trash.svg";
@@ -43,11 +51,13 @@ function displayBooks(bookArray) {
         bookState.textContent = bookArray[i].state;
         if(bookState.textContent === "read") {
             bookState.style.color = "cyan";
+            
         }
         else {
             bookState.style.color = "red";
         }
         trashIcon.setAttribute("data-key", `${i}`);
+        readIcon.setAttribute("data-key", `${i}`);
         trashButtonList = document.querySelectorAll(".trash");
 
     }
@@ -132,11 +142,19 @@ document.addEventListener("click", function (event) {
         let num = parseInt(event.target.dataset.key);
         console.log(num);
         myLibrary.splice(num,1);
-        displayBooks(myLibrary);
     }
+
+    if(event.target.matches(".read")) {
+        let num = parseInt(event.target.dataset.key);
+        console.log(myLibrary[num].state);
+        if(myLibrary[num].state === "read") {
+            console.log("first if case");
+            myLibrary[num].state = "unread";
+        }
+        else {
+            console.log("else case");
+            myLibrary[num].state = "read";
+        }
+    }
+    displayBooks(myLibrary);
 });
-
-
-
-
-
