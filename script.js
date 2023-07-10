@@ -7,9 +7,7 @@ const addButton = document.getElementById("add-button");
 const popupWindow = document.querySelector(".popup");
 let submitButton = document.getElementById("submit-button");
 const bookForm = document.getElementById("book-form");
-const trashButton = document.getElementById("trash-icon");
-
-
+let trashButtonList = document.querySelectorAll(".trash");
 function Book(title, author, pages, state) {
 
     this.title = title;
@@ -18,16 +16,13 @@ function Book(title, author, pages, state) {
     this.state = state;
 }
 
-function addBookToLibrary() {
 
-}
 
 function displayBooks(bookArray) {
     mainBox.innerHTML ="";
-    bookArray.forEach(element => {
+    for(let i = 0; i < bookArray.length; i++) {
         let newCard = mainBox.appendChild(document.createElement("div"));
         newCard.classList.add("card");
-        console.log(bookArray[1]);
         let bookTitle = newCard.appendChild(document.createElement("p"));
         let bookAuthor = newCard.appendChild(document.createElement("p"));
         let bookPages = newCard.appendChild(document.createElement("p"));
@@ -39,20 +34,23 @@ function displayBooks(bookArray) {
         shareIcon.classList.add("icon");
         shareIcon.src = "img/share.svg";
         trashIcon.classList.add("icon");
+        trashIcon.classList.add("trash");
         trashIcon.src = "img/trash.svg";
 
-        bookTitle.textContent = element.title;
-        bookAuthor.textContent = element.author;
-        bookPages.textContent = element.pages;
-        bookState.textContent = element.state;
+        bookTitle.textContent = bookArray[i].title;
+        bookAuthor.textContent = bookArray[i].author;
+        bookPages.textContent = bookArray[i].pages;
+        bookState.textContent = bookArray[i].state;
         if(bookState.textContent === "read") {
             bookState.style.color = "cyan";
         }
         else {
             bookState.style.color = "red";
         }
-        console.log("state: " + element.state);;
-    });
+        trashIcon.setAttribute("data-key", `${i}`);
+        trashButtonList = document.querySelectorAll(".trash");
+
+    }
 }
 
 const isHidden = elem => {
@@ -63,13 +61,10 @@ function showPopup() {
     if(isHidden(popupWindow)) {
         popupWindow.style.visibility = "visible";
         container.style.webkitFilter = "blur(3px)";
-        console.log("set visiblity to visible");
     }
     else {
         popupWindow.style.visibility = "hidden";
         container.style.webkitFilter = "blur(0px)";
-        console.log("set visiblity to visible");
-
     }
 }
 
@@ -104,10 +99,8 @@ function clearPopup() {
 myLibrary[0] = new Book("1984","George Orwell",259,"read");
 myLibrary[1] = new Book("Brave new World","Alous Huxley",350,"unread");
 displayBooks(myLibrary);
-console.log(addButton);
-console.log(myLibrary[0]);
-
-
+console.log(myLibrary);
+console.log(trashButtonList);
 
 addButton.addEventListener("click", function() {
     bookForm.reset();
@@ -122,4 +115,28 @@ window.addEventListener("keydown", function(e) {
         showPopup();
     }
 });
+
+// for(let i = 0; i < trashButtonList.length; i++) {
+//     trashButtonList[i].addEventListener("click", function() {
+//         console.log(myLibrary[i].title + " deleted");
+//         myLibrary.splice(i,1);
+//         displayBooks(myLibrary);
+//         console.log(myLibrary);
+//         console.log(trashButtonList);
+//     });
+// }
+
+document.addEventListener("click", function (event) {
+    if(event.target.matches(".trash")) {
+        console.log(event.target);
+        let num = parseInt(event.target.dataset.key);
+        console.log(num);
+        myLibrary.splice(num,1);
+        displayBooks(myLibrary);
+    }
+});
+
+
+
+
 
