@@ -8,12 +8,27 @@ const popupWindow = document.querySelector(".popup");
 let submitButton = document.getElementById("submit-button");
 const bookForm = document.getElementById("book-form");
 let trashButtonList = document.querySelectorAll(".trash");
-function Book(title, author, pages, state) {
 
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.state = state;
+// function Book(title, author, pages, state) {
+
+//     this.title = title;
+//     this.author = author;
+//     this.pages = pages;
+//     this.state = state;
+// }
+
+class Book {
+
+    constructor(title, author, pages, state) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.state = state;
+    }
+
+    print() {
+        console.log(this.name + " " + this.author + " " + this.pages + " " + this.state);
+    }
 }
 
 
@@ -126,15 +141,6 @@ window.addEventListener("keydown", function(e) {
     }
 });
 
-// for(let i = 0; i < trashButtonList.length; i++) {
-//     trashButtonList[i].addEventListener("click", function() {
-//         console.log(myLibrary[i].title + " deleted");
-//         myLibrary.splice(i,1);
-//         displayBooks(myLibrary);
-//         console.log(myLibrary);
-//         console.log(trashButtonList);
-//     });
-// }
 
 document.addEventListener("click", function (event) {
     if(event.target.matches(".trash")) {
